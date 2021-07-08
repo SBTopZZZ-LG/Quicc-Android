@@ -7,8 +7,8 @@ public class Event {
 
     private String host;
     private String title;
-    private String startDate;
-    private String endDate;
+    private Long startDate;
+    private Long endDate;
     private List<String> members;
     private List<String> visitedMembers;
 
@@ -16,7 +16,7 @@ public class Event {
         this.uid = uid;
     }
 
-    public Event(String uid, String host, String title, String startDate, String endDate, List<String> members, List<String> visitedMembers) {
+    public Event(String uid, String host, String title, Long startDate, Long endDate, List<String> members, List<String> visitedMembers) {
         this.uid = uid;
         this.host = host;
         this.title = title;
@@ -42,19 +42,19 @@ public class Event {
         this.title = title;
     }
 
-    public String getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

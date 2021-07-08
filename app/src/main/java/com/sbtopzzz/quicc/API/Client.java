@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Client {
-    public static final String HOST_IP = "localhost";
+    public static final String HOST_IP = "192.168.1.20";
     public static final String BASE_URL = "http://"+HOST_IP+":3000";
     private static Retrofit retrofit = null;
 

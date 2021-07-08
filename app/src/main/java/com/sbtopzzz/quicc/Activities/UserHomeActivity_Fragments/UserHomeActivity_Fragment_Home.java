@@ -1,22 +1,42 @@
 package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.sbtopzzz.quicc.API.Funcs;
+import com.sbtopzzz.quicc.API.Schemas.Event;
+import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.SharedClasses.CurrentUser;
+import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity_Fragment_Home_Objects.MyEvent;
+import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity_Fragment_Home_Objects.MyEventsAdapter;
 import com.sbtopzzz.quicc.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
 public class UserHomeActivity_Fragment_Home extends Fragment {
-    public UserHomeActivity_Fragment_Home() {
-        // Required empty public constructor
+    private Context context;
+    private RecyclerView rvMyEvents;
+
+    public UserHomeActivity_Fragment_Home(@NonNull Context context) {
+        this.context = context;
     }
 
-    public static UserHomeActivity_Fragment_Home newInstance(String param1, String param2) {
-        UserHomeActivity_Fragment_Home fragment = new UserHomeActivity_Fragment_Home();
+    public static UserHomeActivity_Fragment_Home newInstance(@NonNull Context context) {
+        UserHomeActivity_Fragment_Home fragment = new UserHomeActivity_Fragment_Home(context);
 
         return fragment;
     }
@@ -26,10 +46,42 @@ public class UserHomeActivity_Fragment_Home extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    private void Initialize(View parent) {
+        rvMyEvents = parent.findViewById(R.id.rvMyEvents);
+
+        Funcs.eventsGet(CurrentUser.user.uid, new Funcs.EventsGetResult() {
+            @Override
+            public void onSuccess(@NonNull List<Event> events) {
+                Toast.makeText(context, "Events count: " + events.size(), Toast.LENGTH_SHORT).show();
+
+                List<MyEvent> myEvents = new ArrayList<>();
+                for (Event event : events)
+                    myEvents.add(new MyEvent(event.getTitle(), new Date(event.getStartDate())));
+
+                MyEventsAdapter adapter = new MyEventsAdapter(context, myEvents);
+                rvMyEvents.setHasFixedSize(true);
+                rvMyEvents.setLayoutManager(new LinearLayoutManager(context));
+                rvMyEvents.setAdapter(adapter);
+            }
+
+            @Override
+            public void onWarning(String errorText) {
+                Toast.makeText(context, "Warning: " + errorText, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Throwable t) {
+                Toast.makeText(context, "Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_home_activity___home, container, false);
+        View main = inflater.inflate(R.layout.fragment_user_home_activity___home, container, false);
+        Initialize(main);
+
+        return main;
     }
 }
