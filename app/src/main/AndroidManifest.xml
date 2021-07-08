@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuiccApp">
-        <activity android:name=".Activities.UserHomeActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBarSpecific"></activity>
+        <activity android:name=".Activities.UserViewEventActivity"></activity>
+        <activity
+            android:name=".Activities.UserHomeActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBarSpecific" />
         <activity android:name=".Activities.UserRegisterActivity" />
         <activity android:name=".Activities.UserLoginActivity" />
         <activity android:name=".MainActivity">
