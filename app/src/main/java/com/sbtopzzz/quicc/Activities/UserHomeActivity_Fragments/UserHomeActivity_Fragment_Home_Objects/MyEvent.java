@@ -5,10 +5,12 @@ import java.util.Date;
 public class MyEvent {
     private String eventName;
     private Date startDate;
+    private String eventUid;
 
-    public MyEvent(String eventName, Date startDate) {
+    public MyEvent(String eventName, Date startDate, String eventUid) {
         this.eventName = eventName;
         this.startDate = startDate;
+        this.eventUid = eventUid;
     }
 
     public String getEventName() {
@@ -25,5 +27,13 @@ public class MyEvent {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public String getEventUid() {
+        return eventUid;
+    }
+
+    public void setEventUid(String eventUid) {
+        this.eventUid = eventUid;
     }
 }

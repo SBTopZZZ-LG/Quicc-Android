@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UserGet_Body {
+public class UserFriends_Default {
     @SerializedName("email")
     private String emailId;
 
@@ -12,13 +12,9 @@ public class UserGet_Body {
     @SerializedName("targetEmail")
     private String targetEmailId;
 
-    @Nullable
-    private String targetUserId;
-
-    public UserGet_Body(String emailId, @Nullable String targetEmailId, @Nullable String targetUserId) {
+    public UserFriends_Default(String emailId, @Nullable String targetEmailId) {
         this.emailId = emailId;
         this.targetEmailId = targetEmailId;
-        this.targetUserId = targetUserId;
     }
 
     public String getEmailId() {
@@ -36,14 +32,5 @@ public class UserGet_Body {
 
     public void setTargetEmailId(@Nullable String targetEmailId) {
         this.targetEmailId = targetEmailId;
-    }
-
-    @Nullable
-    public String getTargetUserId() {
-        return targetUserId;
-    }
-
-    public void setTargetUserId(@Nullable String targetUserId) {
-        this.targetUserId = targetUserId;
     }
 }

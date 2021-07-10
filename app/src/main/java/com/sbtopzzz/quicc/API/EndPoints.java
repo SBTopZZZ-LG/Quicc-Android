@@ -4,8 +4,10 @@ import com.sbtopzzz.quicc.API.Schemas.EventCreate_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventDelete_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventJoin_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventUpdate_Body;
+import com.sbtopzzz.quicc.API.Schemas.UserFriends_Default;
 import com.sbtopzzz.quicc.API.Schemas.UserGet_Body;
 import com.sbtopzzz.quicc.API.Schemas.UserRegister_Body;
+import com.sbtopzzz.quicc.API.Schemas.UserSearch_Default;
 import com.sbtopzzz.quicc.API.Schemas.UserSignIn_Body;
 import com.sbtopzzz.quicc.API.Schemas.UserUpdate_Body;
 
@@ -34,6 +36,27 @@ public interface EndPoints {
 
     @POST("/register")
     Call<Object> userRegister(@Body UserRegister_Body body);
+
+    @POST("/user/friends/add")
+    Call<Object> userFriendsAdd(@Header("authorization") String loginToken, @Body UserFriends_Default body);
+
+    @POST("/user/friends/remove")
+    Call<Object> userFriendsRemove(@Header("authorization") String loginToken, @Body UserFriends_Default body);
+
+    @POST("/user/friends")
+    Call<Object> userFriendsGet(@Header("authorization") String loginToken, @Body UserFriends_Default body);
+
+    @POST("/user/friends/one")
+    Call<Object> userFriendsGetOne(@Header("authorization") String loginToken, @Body UserFriends_Default body);
+
+    @POST("/user/search/name")
+    Call<Object> userSearchByName(@Header("authorization") String loginToken, @Body UserSearch_Default body);
+
+    @POST("/user/search/email")
+    Call<Object> userSearchByEmail(@Header("authorization") String loginToken, @Body UserSearch_Default body);
+
+    @POST("/user/search")
+    Call<Object> userSearch(@Header("authorization") String loginToken, @Body UserSearch_Default body);
 
     @POST("/createEvent")
     Call<Object> eventCreate(@Header("authorization") String loginToken, @Body EventCreate_Body body);

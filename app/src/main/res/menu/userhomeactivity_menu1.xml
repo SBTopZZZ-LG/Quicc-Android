@@ -11,7 +11,11 @@
         <item
             android:id="@+id/nav_invitations"
             android:icon="@drawable/invitations"
-            android:title="Invitations" />
+            android:title="My Invitations" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/friends"
+            android:title="My Friends" />
     </group>
 
     <group android:checkableBehavior="none">

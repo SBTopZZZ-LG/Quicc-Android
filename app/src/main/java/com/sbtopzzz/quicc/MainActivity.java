@@ -43,11 +43,21 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onWarning(String errorText) {
                     Toast.makeText(MainActivity.this, "Old sign in failed, Warning: " + errorText, Toast.LENGTH_SHORT).show();
+
+                    SP.push("userLoginEmail", null);
+                    SP.push("userLoginToken", null);
+
+                    startActivity(new Intent(MainActivity.this, UserLoginActivity.class));
                 }
 
                 @Override
                 public void onFailure(@NonNull Throwable t) {
                     Toast.makeText(MainActivity.this, "Old sign in failed, Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    SP.push("userLoginEmail", null);
+                    SP.push("userLoginToken", null);
+
+                    startActivity(new Intent(MainActivity.this, UserLoginActivity.class));
                 }
             });
         else

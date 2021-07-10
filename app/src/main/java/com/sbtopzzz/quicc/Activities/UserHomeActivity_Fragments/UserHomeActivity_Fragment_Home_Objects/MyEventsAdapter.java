@@ -1,14 +1,17 @@
 package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity_Fragment_Home_Objects;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sbtopzzz.quicc.Activities.UserViewEventActivity;
 import com.sbtopzzz.quicc.R;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +43,14 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.ViewHo
 
         Date startDate = myEvent.getStartDate();
         holder.tvEventStart.setText("Starting on " + new SimpleDateFormat("d/M").format(startDate) + ", " + new SimpleDateFormat("hh:mm a").format(startDate));
+
+        holder.clMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, UserViewEventActivity.class)
+                .putExtra("eventUid", myEvent.getEventUid()));
+            }
+        });
     }
 
     @Override
@@ -48,11 +59,13 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ConstraintLayout clMain;
         public TextView tvEventName, tvEventStart;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder( View itemView) {
             super(itemView);
 
+            clMain = itemView.findViewById(R.id.clMain);
             tvEventName = itemView.findViewById(R.id.tvEventName);
             tvEventStart = itemView.findViewById(R.id.tvEventStart);
         }

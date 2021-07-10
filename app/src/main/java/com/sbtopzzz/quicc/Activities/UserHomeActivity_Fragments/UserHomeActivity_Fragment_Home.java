@@ -2,16 +2,15 @@ package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.sbtopzzz.quicc.API.Funcs;
 import com.sbtopzzz.quicc.API.Schemas.Event;
@@ -21,11 +20,8 @@ import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity
 import com.sbtopzzz.quicc.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class UserHomeActivity_Fragment_Home extends Fragment {
     private Context context;
@@ -37,18 +33,24 @@ public class UserHomeActivity_Fragment_Home extends Fragment {
 
     public static UserHomeActivity_Fragment_Home newInstance(@NonNull Context context) {
         UserHomeActivity_Fragment_Home fragment = new UserHomeActivity_Fragment_Home(context);
-
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View main = inflater.inflate(R.layout.fragment_user_home_activity___home, container, false);
+        Initialize(main);
+        GetMyEvents();
+
+        return main;
     }
 
     private void Initialize(View parent) {
         rvMyEvents = parent.findViewById(R.id.rvMyEvents);
+    }
 
+    private void GetMyEvents() {
         Funcs.eventsGet(CurrentUser.user.uid, new Funcs.EventsGetResult() {
             @Override
             public void onSuccess(@NonNull List<Event> events) {
@@ -56,7 +58,7 @@ public class UserHomeActivity_Fragment_Home extends Fragment {
 
                 List<MyEvent> myEvents = new ArrayList<>();
                 for (Event event : events)
-                    myEvents.add(new MyEvent(event.getTitle(), new Date(event.getStartDate())));
+                    myEvents.add(new MyEvent(event.getTitle(), new Date(event.getStartDate()), event.uid));
 
                 MyEventsAdapter adapter = new MyEventsAdapter(context, myEvents);
                 rvMyEvents.setHasFixedSize(true);
@@ -74,14 +76,5 @@ public class UserHomeActivity_Fragment_Home extends Fragment {
                 Toast.makeText(context, "Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View main = inflater.inflate(R.layout.fragment_user_home_activity___home, container, false);
-        Initialize(main);
-
-        return main;
     }
 }
