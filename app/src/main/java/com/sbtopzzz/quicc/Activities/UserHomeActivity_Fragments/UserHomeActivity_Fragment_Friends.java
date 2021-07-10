@@ -1,5 +1,6 @@
 package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sbtopzzz.quicc.API.Funcs;
 import com.sbtopzzz.quicc.API.Schemas.User;
 import com.sbtopzzz.quicc.API.Schemas.UserFriend;
 import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.SharedClasses.CurrentUser;
 import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity_Fragment_Friends_Objects.Friend;
 import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity_Fragment_Friends_Objects.MyFriendsAdapter;
+import com.sbtopzzz.quicc.Activities.UserSearchActivity;
 import com.sbtopzzz.quicc.R;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.List;
 
 public class UserHomeActivity_Fragment_Friends extends Fragment {
     private RecyclerView rvMyFriends;
+    private FloatingActionButton fab;
 
     public UserHomeActivity_Fragment_Friends() {
         // Required empty public constructor
@@ -53,6 +57,14 @@ public class UserHomeActivity_Fragment_Friends extends Fragment {
 
     private void Initialize(View parent) {
         rvMyFriends = parent.findViewById(R.id.rvMyFriends);
+        fab = parent.findViewById(R.id.fabSearch);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), UserSearchActivity.class));
+            }
+        });
     }
 
     private void GetMyFriends() {
@@ -67,7 +79,7 @@ public class UserHomeActivity_Fragment_Friends extends Fragment {
                     Funcs.userGetByUid(CurrentUser.user.getEmailId(), friend.uid, new Funcs.UserGetResult() {
                         @Override
                         public void onSuccess(@NonNull User user) {
-                            uiFriends.add(new Friend(user.getName(), user.getEmailId()));
+                            uiFriends.add(new Friend(user.uid, user.getName(), user.getEmailId()));
 
                             adapter.notifyDataSetChanged();
                         }

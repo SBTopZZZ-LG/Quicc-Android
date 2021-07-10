@@ -1,12 +1,12 @@
-package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivity_Fragment_Friends_Objects;
+package com.sbtopzzz.quicc.Activities.UserSearchActivity_Objects;
 
-public class Friend {
+public class Search {
     public final String uid;
 
     private String userName;
     private String userEmailId;
 
-    public Friend(String uid, String userName, String userEmailId) {
+    public Search(String uid, String userName, String userEmailId) {
         this.uid = uid;
 
         this.userName = userName;

@@ -9,17 +9,17 @@ public class UserFriend {
     }
 
     public final String uid;
-    private final int status;
+    private final double status;
 
-    public UserFriend(String uid, int status) {
+    public UserFriend(String uid, double status) {
         this.uid = uid;
         this.status = status;
     }
 
     public UserFriendStatus getStatus() {
         return status == 0 ? UserFriendStatus.SENT :
-                (status == 1 ? UserFriendStatus.RECEIVED :
-                        (status == 2 ? UserFriendStatus.SENDER_ACCEPTED :
+                (status == 1.0 ? UserFriendStatus.RECEIVED :
+                        (status == 2.0 ? UserFriendStatus.SENDER_ACCEPTED :
                                 UserFriendStatus.RECEIVER_ACCEPTED));
     }
 }

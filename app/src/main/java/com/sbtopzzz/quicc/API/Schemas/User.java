@@ -2,6 +2,8 @@ package com.sbtopzzz.quicc.API.Schemas;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class User {
     public final String uid;
 
@@ -9,6 +11,8 @@ public class User {
 
     @SerializedName("email")
     private String emailId;
+
+    public List<UserFriend> friends;
 
     public User(String uid) {
         this.uid = uid;

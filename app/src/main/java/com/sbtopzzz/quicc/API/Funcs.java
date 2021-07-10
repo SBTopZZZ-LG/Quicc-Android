@@ -12,6 +12,7 @@ import com.sbtopzzz.quicc.API.Schemas.UserGet_Body;
 import com.sbtopzzz.quicc.API.Schemas.UserRegister_Body;
 import com.sbtopzzz.quicc.API.Schemas.UserSearch_Default;
 import com.sbtopzzz.quicc.API.Schemas.UserSignIn_Body;
+import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.SharedClasses.CurrentUser;
 import com.sbtopzzz.quicc.HelperClasses.SP;
 
 import java.util.ArrayList;
@@ -44,6 +45,19 @@ public class Funcs {
                     Map<String, Object> map = (Map<String, Object>) response.body();
                     User user2 = new User(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString());
 
+                    List<Object> list = (List<Object>) map.get("friends");
+
+                    List<UserFriend> friends = new ArrayList<>();
+
+                    if (list != null)
+                        for (Object obj : list) {
+                            Map<String, Object> map2 = (Map<String, Object>) obj;
+
+                            friends.add(new UserFriend(map2.get("userUid").toString(), Double.parseDouble(map2.get("status").toString())));
+                        }
+
+                    user2.friends = friends;
+
                     result.onSuccess(null, user2);
 
                     return;
@@ -75,6 +89,18 @@ public class Funcs {
 
                     Map<String, Object> user = (Map<String, Object>) map.get("user");
                     User user2 = new User(user.get("uid").toString(), user.get("name").toString(), user.get("email").toString());
+
+                    List<Object> list = (List<Object>) map.get("friends");
+
+                    List<UserFriend> friends = new ArrayList<>();
+                    if (list != null)
+                        for (Object obj : list) {
+                            Map<String, Object> map2 = (Map<String, Object>) obj;
+
+                            friends.add(new UserFriend(map2.get("userUid").toString(), Double.parseDouble(map2.get("status").toString())));
+                        }
+
+                    user2.friends = friends;
 
                     result.onSuccess(loginToken, user2);
 
@@ -206,7 +232,9 @@ public class Funcs {
                 if (response.code() == 200) {
                     String responseText = response.body().toString();
 
-                    if (responseText.equals("friendRequestCreated"))
+                    System.out.println("Response: " + responseText);
+
+                    if (responseText.contains("friendRequestCreated"))
                         result.onSuccess(UserFriendsState.FRIEND_REQUEST_CREATED);
                     else
                         result.onSuccess(UserFriendsState.FRIEND_REQUEST_ACCEPTED);
@@ -320,7 +348,7 @@ public class Funcs {
 
                         System.out.println(map);
 
-                        friends.add(new UserFriend(map.get("userUid").toString(), Integer.parseInt(map.get("status").toString())));
+                        friends.add(new UserFriend(map.get("userUid").toString(), Double.parseDouble(map.get("status").toString())));
                     }
 
                     result.onSuccess(friends);
@@ -360,7 +388,8 @@ public class Funcs {
                     for (Object obj : list) {
                         Map<String, Object> map = (Map<String, Object>) obj;
 
-                        users.add(new SearchUser(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString()));
+                        if (!map.get("uid").toString().equals(CurrentUser.user.uid))
+                            users.add(new SearchUser(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString()));
                     }
 
                     result.onSuccess(users);
@@ -394,7 +423,8 @@ public class Funcs {
                     for (Object obj : list) {
                         Map<String, Object> map = (Map<String, Object>) obj;
 
-                        users.add(new SearchUser(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString()));
+                        if (!map.get("uid").toString().equals(CurrentUser.user.uid))
+                            users.add(new SearchUser(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString()));
                     }
 
                     result.onSuccess(users);
@@ -428,7 +458,8 @@ public class Funcs {
                     for (Object obj : list) {
                         Map<String, Object> map = (Map<String, Object>) obj;
 
-                        users.add(new SearchUser(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString()));
+                        if (!map.get("uid").toString().equals(CurrentUser.user.uid))
+                            users.add(new SearchUser(map.get("uid").toString(), map.get("name").toString(), map.get("email").toString()));
                     }
 
                     result.onSuccess(users);
