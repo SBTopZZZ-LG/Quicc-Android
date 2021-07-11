@@ -1,7 +1,5 @@
 package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.SharedClasses;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.sbtopzzz.quicc.API.Funcs;

@@ -8,9 +8,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sbtopzzz.quicc.API.Funcs;
+import com.sbtopzzz.quicc.API.Schemas.UserFriend;
 import com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.SharedClasses.CurrentUser;
 import com.sbtopzzz.quicc.R;
 
@@ -38,6 +40,47 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
 
         holder.tvUserName.setText(friend.getUserName());
         holder.tvEmailID.setText(friend.getUserEmailId());
+
+        Funcs.userFriendOne(CurrentUser.user.getEmailId(), friend.getUserEmailId(), new Funcs.UserFriendOneResult() {
+            @Override
+            public void onSuccess(@Nullable UserFriend friend) {
+                if (friend.getStatus() == UserFriend.UserFriendStatus.RECEIVED)
+                    holder.ibAccept.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onWarning(String errorText) {
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Throwable t) {
+
+            }
+        });
+
+        holder.ibAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Funcs.userFriendsAdd(CurrentUser.user.getEmailId(), friend.getUserEmailId(), new Funcs.UserFriendsAddResult() {
+                    @Override
+                    public void onSuccess(@NonNull Funcs.UserFriendsState state) {
+                        if (state == Funcs.UserFriendsState.FRIEND_REQUEST_ACCEPTED)
+                            holder.ibAccept.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onWarning(String errorText) {
+                        Toast.makeText(v.getContext(), "Warning: " + errorText, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Throwable t) {
+                        Toast.makeText(v.getContext(), "Failure: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
         holder.ibRemove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +122,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvUserName, tvEmailID;
-        public ImageButton ibRemove;
+        public ImageButton ibAccept, ibRemove;
 
         public ViewHolder(View holder) {
             super(holder);
@@ -87,6 +130,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
             tvUserName = holder.findViewById(R.id.tvUserName);
             tvEmailID = holder.findViewById(R.id.tvEmailID);
 
+            ibAccept = holder.findViewById(R.id.ibAccept);
             ibRemove = holder.findViewById(R.id.ibRemove);
         }
     }

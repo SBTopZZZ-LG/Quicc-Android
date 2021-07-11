@@ -234,6 +234,8 @@ public class Funcs {
 
                     System.out.println("Response: " + responseText);
 
+                    CurrentUser.ReloadUser();
+
                     if (responseText.contains("friendRequestCreated"))
                         result.onSuccess(UserFriendsState.FRIEND_REQUEST_CREATED);
                     else
@@ -268,6 +270,8 @@ public class Funcs {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.code() == 200) {
+                    CurrentUser.ReloadUser();
+
                     result.onSuccess();
 
                     return;
@@ -307,7 +311,7 @@ public class Funcs {
                     }
 
                     UserFriend friend = new UserFriend(map.get("userUid").toString(),
-                            Integer.parseInt(map.get("status").toString().split(".")[0]));
+                            Double.parseDouble(map.get("status").toString()));
 
                     result.onSuccess(friend);
 
