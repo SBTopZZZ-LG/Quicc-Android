@@ -1,10 +1,14 @@
 package com.sbtopzzz.quicc.API.Schemas;
 
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 public class Event {
+    @Nullable
     public final String uid;
 
+    @Nullable
     private String host;
     private String title;
     private Long startDate;
@@ -12,11 +16,11 @@ public class Event {
     private List<String> members;
     private List<String> visitedMembers;
 
-    public Event(String uid) {
+    public Event(@Nullable String uid) {
         this.uid = uid;
     }
 
-    public Event(String uid, String host, String title, Long startDate, Long endDate, List<String> members, List<String> visitedMembers) {
+    public Event(@Nullable String uid, @Nullable String host, String title, Long startDate, Long endDate, List<String> members, List<String> visitedMembers) {
         this.uid = uid;
         this.host = host;
         this.title = title;
@@ -27,11 +31,31 @@ public class Event {
         this.visitedMembers = visitedMembers;
     }
 
+    public Event(String title, Long startDate, Long endDate, List<String> members, List<String> visitedMembers) {
+        uid = null;
+        host = null;
+
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.members = members;
+        this.visitedMembers = visitedMembers;
+    }
+
+    public Event(String title, Long startDate, Long endDate) {
+        uid = null;
+        host = null;
+
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public String getHost() {
         return host;
     }
 
-    public void setHost(String host) {
+    public void setHost(@Nullable String host) {
         this.host = host;
     }
 

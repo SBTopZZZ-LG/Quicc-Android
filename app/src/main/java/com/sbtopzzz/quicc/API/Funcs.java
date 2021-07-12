@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.sbtopzzz.quicc.API.Schemas.Event;
+import com.sbtopzzz.quicc.API.Schemas.EventCreate_Body;
+import com.sbtopzzz.quicc.API.Schemas.EventDelete_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventMembers_Default;
 import com.sbtopzzz.quicc.API.Schemas.SearchUser;
 import com.sbtopzzz.quicc.API.Schemas.User;
@@ -485,6 +487,71 @@ public class Funcs {
     }
     public interface UserSearchResult {
         void onSuccess(@NonNull List<SearchUser> users);
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventCreate(@NonNull String emailId, @NonNull Event event, @NonNull EventCreateResult result) {
+        EndPoints client = Client.getClient().create(EndPoints.class);
+        EventCreate_Body body = new EventCreate_Body(emailId, event);
+
+        Call<Object> call = client.eventCreate(getLoginToken(), body);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.code() == 200) {
+                    Map<String, Object> map = (Map<String, Object>) response.body();
+                    String eventUid = map.get("uid").toString();
+
+                    result.onSuccess(eventUid);
+
+                    return;
+                }
+
+                // Failure
+                String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventCreateResult {
+        void onSuccess(@NonNull String eventUid);
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventDelete(@NonNull String emailId, @NonNull String eventUid, @NonNull EventDeleteResult result) {
+        EndPoints client = Client.getClient().create(EndPoints.class);
+        EventDelete_Body body = new EventDelete_Body(emailId, eventUid);
+
+        Call<Object> call = client.eventDelete(getLoginToken(), body);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.code() == 200) {
+                    result.onSuccess();
+
+                    return;
+                }
+
+                // Failure
+                String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventDeleteResult {
+        void onSuccess();
         void onWarning(String errorText);
         void onFailure(@NonNull Throwable t);
     }

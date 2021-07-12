@@ -3,16 +3,26 @@ package com.sbtopzzz.quicc.Activities.UserHomeActivity_Fragments.UserHomeActivit
 import java.util.Date;
 
 public class MyEvent {
+    private String host;
     private String eventName;
     private Date startDate;
     private Date endDate;
     private String eventUid;
 
-    public MyEvent(String eventName, Date startDate, Date endDate, String eventUid) {
+    public MyEvent(String host, String eventName, Date startDate, Date endDate, String eventUid) {
+        this.host = host;
         this.eventName = eventName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.eventUid = eventUid;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public String getEventName() {
