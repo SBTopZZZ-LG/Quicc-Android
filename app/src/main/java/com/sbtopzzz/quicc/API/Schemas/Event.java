@@ -22,6 +22,7 @@ public class Event {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+        reformatDates();
         this.members = members;
         this.visitedMembers = visitedMembers;
     }
@@ -48,6 +49,7 @@ public class Event {
 
     public void setStartDate(Long startDate) {
         this.startDate = startDate;
+        reformatDates();
     }
 
     public Long getEndDate() {
@@ -56,6 +58,7 @@ public class Event {
 
     public void setEndDate(Long endDate) {
         this.endDate = endDate;
+        reformatDates();
     }
 
     public List<String> getMembers() {
@@ -72,5 +75,12 @@ public class Event {
 
     public void setVisitedMembers(List<String> visitedMembers) {
         this.visitedMembers = visitedMembers;
+    }
+
+    private void reformatDates() {
+        if (startDate.toString().length() < 13)
+            startDate *= Long.parseLong(String.valueOf(Math.pow(10, 13 - startDate.toString().length())).split("\\.")[0]);
+        if (endDate.toString().length() < 13)
+            endDate *= Long.parseLong(String.valueOf(Math.pow(10, 13 - endDate.toString().length())).split("\\.")[0]);
     }
 }

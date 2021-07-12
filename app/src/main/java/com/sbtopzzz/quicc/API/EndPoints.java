@@ -3,6 +3,7 @@ package com.sbtopzzz.quicc.API;
 import com.sbtopzzz.quicc.API.Schemas.EventCreate_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventDelete_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventJoin_Body;
+import com.sbtopzzz.quicc.API.Schemas.EventMembers_Default;
 import com.sbtopzzz.quicc.API.Schemas.EventUpdate_Body;
 import com.sbtopzzz.quicc.API.Schemas.UserFriends_Default;
 import com.sbtopzzz.quicc.API.Schemas.UserGet_Body;
@@ -81,6 +82,15 @@ public interface EndPoints {
 
     @GET("/event")
     Call<Object> eventGet(@Query("event") String eventUid);
+
+    @POST("/event/members/add")
+    Call<Object> eventMembersAdd(@Header("authorization") String loginToken, @Body EventMembers_Default body);
+
+    @POST("/event/members/remove")
+    Call<Object> eventMembersRemove(@Header("authorization") String loginToken, @Body EventMembers_Default body);
+
+    @POST("/event/members")
+    Call<Object> eventMembersGet(@Header("authorization") String loginToken, @Body EventMembers_Default body);
 
     @POST("/joinEvent")
     Call<Object> eventJoin(@Header("authorization") String loginToken, @Body EventJoin_Body body);

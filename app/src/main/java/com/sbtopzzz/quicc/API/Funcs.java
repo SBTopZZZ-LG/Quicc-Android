@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.sbtopzzz.quicc.API.Schemas.Event;
+import com.sbtopzzz.quicc.API.Schemas.EventMembers_Default;
 import com.sbtopzzz.quicc.API.Schemas.SearchUser;
 import com.sbtopzzz.quicc.API.Schemas.User;
 import com.sbtopzzz.quicc.API.Schemas.UserFriend;
@@ -649,6 +650,111 @@ public class Funcs {
     }
     public interface EventGetResult {
         void onSuccess(@NonNull Event event);
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventMembersAdd(@NonNull String emailId, @NonNull String targetEmailId, @NonNull String eventUid,
+                                       @NonNull EventMembersAddResult result) {
+        EndPoints client = Client.getClient().create(EndPoints.class);
+        EventMembers_Default body = new EventMembers_Default(emailId, targetEmailId, eventUid);
+        
+        Call<Object> call = client.eventMembersAdd(getLoginToken(), body);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.code() == 200) {
+                    result.onSuccess();
+
+                    return;
+                }
+
+                // Failure
+                String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventMembersAddResult {
+        void onSuccess();
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventMembersRemove(@NonNull String emailId, @NonNull String targetEmailId, @NonNull String eventUid,
+                                          @NonNull EventMembersRemoveResult result) {
+        EndPoints client = Client.getClient().create(EndPoints.class);
+        EventMembers_Default body = new EventMembers_Default(emailId, targetEmailId, eventUid);
+
+        Call<Object> call = client.eventMembersRemove(getLoginToken(), body);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.code() == 200) {
+                    result.onSuccess();
+
+                    return;
+                }
+
+                // Failure
+                String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventMembersRemoveResult {
+        void onSuccess();
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventMembersGet(@NonNull String emailId, @NonNull String eventUid,
+                                          @NonNull EventMembersGetResult result) {
+        EndPoints client = Client.getClient().create(EndPoints.class);
+        EventMembers_Default body = new EventMembers_Default(emailId, null, eventUid);
+
+        Call<Object> call = client.eventMembersGet(getLoginToken(), body);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.code() == 200) {
+                    List<Object> list = (List<Object>) response.body();
+
+                    List<String> userUids = new ArrayList<>();
+
+                    if (list != null)
+                        for (Object obj : list) {
+                            userUids.add(obj.toString());
+                        }
+
+                    result.onSuccess(userUids);
+
+                    return;
+                }
+
+                // Failure
+                String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventMembersGetResult {
+        void onSuccess(@NonNull List<String> userUids);
         void onWarning(String errorText);
         void onFailure(@NonNull Throwable t);
     }

@@ -60,7 +60,7 @@ public class UserHomeActivity_Fragment_Invitations extends Fragment {
 
                 List<MyEvent> myEvents = new ArrayList<>();
                 for (Event event : invitedEvents)
-                    myEvents.add(new MyEvent(event.getTitle(), new Date(event.getStartDate()), event.uid));
+                    myEvents.add(new MyEvent(event.getTitle(), new Date(event.getStartDate()), new Date(event.getEndDate()), event.uid));
 
                 MyEventsAdapter adapter = new MyEventsAdapter(context, myEvents);
                 rvInvitations.setHasFixedSize(true);

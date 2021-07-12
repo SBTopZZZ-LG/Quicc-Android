@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sbtopzzz.quicc.Activities.UserViewEventActivity;
 import com.sbtopzzz.quicc.R;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.List;
 public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.ViewHolder> {
     private Context context;
     private List<MyEvent> events;
+
+    private PrettyTime p = new PrettyTime();
 
     public MyEventsAdapter(@NonNull Context context, List<MyEvent> events) {
         this.context = context;
@@ -41,8 +45,19 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.ViewHo
         final MyEvent myEvent = events.get(position);
         holder.tvEventName.setText(myEvent.getEventName());
 
+        Date today = new Date();
         Date startDate = myEvent.getStartDate();
-        holder.tvEventStart.setText("Starting on " + new SimpleDateFormat("d/M").format(startDate) + ", " + new SimpleDateFormat("hh:mm a").format(startDate));
+        Date endDate = myEvent.getEndDate();
+        if (today.after(startDate)) {
+            if (today.before(endDate)) {
+                // Event has started
+                holder.tvEventStart.setText("Started " + p.format(startDate));
+            } else {
+                // Event has ended
+                holder.tvEventStart.setText("Ended " + p.format(endDate));
+            }
+        } else
+            holder.tvEventStart.setText("Will start " + p.format(startDate));
 
         holder.clMain.setOnClickListener(new View.OnClickListener() {
             @Override
