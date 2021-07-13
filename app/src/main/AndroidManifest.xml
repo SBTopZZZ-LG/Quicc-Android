@@ -24,7 +24,8 @@
         <activity
             android:name=".Activities.UserSearchActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBarSpecific" />
-        <activity android:name=".Activities.UserViewEventActivity" />
+        <activity android:name=".Activities.UserViewEventActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBarSpecific"/>
         <activity
             android:name=".Activities.UserHomeActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBarSpecific" />

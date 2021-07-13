@@ -104,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
-                        android:text="Invitees (Total: 0)"
+                        android:text="Invitees (0)"
                         android:textColor="#000000"
                         android:textSize="16sp"
                         android:textStyle="bold"

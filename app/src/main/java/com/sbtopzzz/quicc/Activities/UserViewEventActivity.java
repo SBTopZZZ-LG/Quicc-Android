@@ -123,7 +123,7 @@ public class UserViewEventActivity extends AppCompatActivity {
 
                 List<Invitee> invitees = new ArrayList<>();
 
-                InviteesAdapter adapter2 = new InviteesAdapter(UserViewEventActivity.this, invitees);
+                InviteesAdapter adapter2 = new InviteesAdapter(invitees, event);
                 rvInvitees.setHasFixedSize(true);
                 rvInvitees.setLayoutManager(new LinearLayoutManager(UserViewEventActivity.this));
                 rvInvitees.setAdapter(adapter2);
@@ -132,7 +132,7 @@ public class UserViewEventActivity extends AppCompatActivity {
                     Funcs.userGetByUid(CurrentUser.user.getEmailId(), inviteeUid, new Funcs.UserGetResult() {
                         @Override
                         public void onSuccess(@NonNull User user) {
-                            invitees.add(new Invitee(user.uid.equals(CurrentUser.user.uid) ? "YOU" : user.getName(), user.getEmailId()));
+                            invitees.add(new Invitee(user.uid, user.uid.equals(CurrentUser.user.uid) ? "YOU" : user.getName(), user.getEmailId()));
 
                             adapter2.notifyDataSetChanged();
                         }
@@ -245,6 +245,10 @@ public class UserViewEventActivity extends AppCompatActivity {
                         tvEventStart.setText("Ended " + p.format(endDate));
                         btnJoinEvent.setText("Event has ended");
                         btnJoinEvent.setEnabled(false);
+
+                        btnAddMembers.setVisibility(View.GONE);
+                        fabAction.setVisibility(View.GONE);
+                        fabEditEvent.setVisibility(View.GONE);
                     }
                 } else
                     tvEventStart.setText("Will start " + p.format(startDate));

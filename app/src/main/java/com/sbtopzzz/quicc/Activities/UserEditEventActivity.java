@@ -118,6 +118,10 @@ public class UserEditEventActivity extends AppCompatActivity {
                 startDate = event.getStartDate();
                 endDate = event.getEndDate();
 
+                Date today = new Date();
+                if (today.before(new Date(startDate)))
+                    btnEventStart.setEnabled(true);
+
                 tvEventStart.setText(new SimpleDateFormat("dd/MM, hh:mm a").format(new Date(startDate)));
                 tvEventEnd.setText(new SimpleDateFormat("dd/MM, hh:mm a").format(new Date(endDate)));
             }
