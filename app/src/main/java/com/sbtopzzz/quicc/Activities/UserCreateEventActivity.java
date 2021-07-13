@@ -26,8 +26,8 @@ public class UserCreateEventActivity extends AppCompatActivity {
     private EditText etEventTitle;
     private Button btnStartDate, btnEndDate, btnCreateEvent;
 
-    private Long startDate;
-    private Long endDate;
+    private long startDate = -1;
+    private long endDate = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,15 @@ public class UserCreateEventActivity extends AppCompatActivity {
 
     private void pickDate(boolean isStartDate){
         final Calendar c = Calendar.getInstance();
+
+        if (isStartDate)
+            if (startDate != -1)
+                c.setTimeInMillis(startDate);
+            else {}
+            else
+                if (endDate != -1)
+                    c.setTimeInMillis(endDate);
+
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
