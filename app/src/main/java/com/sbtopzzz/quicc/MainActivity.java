@@ -4,10 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.sbtopzzz.quicc.API.Funcs;
 import com.sbtopzzz.quicc.API.Schemas.User;
 import com.sbtopzzz.quicc.Activities.UserHomeActivity;
@@ -20,12 +27,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Dexter.withContext(this)
+                .withPermission(Manifest.permission.CAMERA)
+                .withListener(new PermissionListener() {
+                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Toast.makeText(MainActivity.this, "Permission granted", Toast.LENGTH_SHORT).show();
+                        Finalize();
+                    }
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(MainActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
+                        Finalize();
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }).check();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    private void Finalize() {
         SP.Initialize(MainActivity.this);
 
         String loginToken = SP.pull("userLoginToken");
@@ -62,5 +81,10 @@ public class MainActivity extends AppCompatActivity {
             });
         else
             startActivity(new Intent(MainActivity.this, UserLoginActivity.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }

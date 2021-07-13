@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,6 +46,7 @@ public class UserViewEventActivity extends AppCompatActivity {
 
     private Button btnAddMembers, btnJoinEvent;
 
+    private SwipeRefreshLayout srlRefresh;
     private FloatingActionButton fabEditEvent;
 
     private final PrettyTime p = new PrettyTime();
@@ -71,6 +73,15 @@ public class UserViewEventActivity extends AppCompatActivity {
 
         fabEditEvent = findViewById(R.id.fabEditEvent);
 
+        srlRefresh = findViewById(R.id.srlRefresh);
+
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadEvent();
+            }
+        });
+
         LoadEvent();
     }
 
@@ -78,6 +89,9 @@ public class UserViewEventActivity extends AppCompatActivity {
         Funcs.eventGet(eventUid, new Funcs.EventGetResult() {
             @Override
             public void onSuccess(@NonNull Event event) {
+                if (srlRefresh.isRefreshing())
+                    srlRefresh.setRefreshing(false);
+
                 tvEventName.setText(event.getTitle());
 
                 List<Organizer> organizers = new ArrayList<Organizer>();

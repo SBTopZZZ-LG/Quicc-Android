@@ -75,16 +75,18 @@ public class UserHomeActivity extends AppCompatActivity {
 
         CurrentUser.user = null;
 
-        finish();
+        signedOut = true;
+
+        onBackPressed();
     }
 
     @Override
     public void onBackPressed() {
-        if (signedOut)
-            super.onBackPressed();
+        if (signedOut) {
+            startActivity(new Intent(UserHomeActivity.this, UserLoginActivity.class));
+        }
         else {
             signOut();
-            signedOut = true;
         }
     }
 }
