@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.sbtopzzz.quicc.API.Schemas.Event;
 import com.sbtopzzz.quicc.API.Schemas.EventCreate_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventDelete_Body;
+import com.sbtopzzz.quicc.API.Schemas.EventJoin_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventMembers_Default;
 import com.sbtopzzz.quicc.API.Schemas.EventUpdate_Body;
 import com.sbtopzzz.quicc.API.Schemas.SearchUser;
@@ -854,6 +855,52 @@ public class Funcs {
     }
     public interface EventMembersGetResult {
         void onSuccess(@NonNull List<String> userUids);
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventJoin(@NonNull String emailId, @NonNull String eventUid, @NonNull EventJoinResult result) {
+        userGetByEmail(emailId, emailId, new UserGetResult() {
+            @Override
+            public void onSuccess(@NonNull User user) {
+                EndPoints client = Client.getClient().create(EndPoints.class);
+                EventJoin_Body body = new EventJoin_Body(emailId, user.uid + ":" + eventUid);
+
+                Call<Object> call = client.eventJoin(getLoginToken(), body);
+                call.enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        if (response.code() == 200) {
+                            result.onSuccess();
+
+                            return;
+                        }
+
+                        // Failure
+                        String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                        result.onWarning(errorText);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+                        result.onFailure(t);
+                    }
+                });
+            }
+
+            @Override
+            public void onWarning(String errorText) {
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(@NonNull Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventJoinResult {
+        void onSuccess();
         void onWarning(String errorText);
         void onFailure(@NonNull Throwable t);
     }

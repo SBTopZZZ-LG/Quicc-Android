@@ -47,7 +47,7 @@ public class UserViewEventActivity extends AppCompatActivity {
     private Button btnAddMembers, btnJoinEvent;
 
     private SwipeRefreshLayout srlRefresh;
-    private FloatingActionButton fabEditEvent;
+    private FloatingActionButton fabEditEvent, fabAction;
 
     private final PrettyTime p = new PrettyTime();
 
@@ -72,6 +72,7 @@ public class UserViewEventActivity extends AppCompatActivity {
         btnJoinEvent = findViewById(R.id.btnJoinEvent);
 
         fabEditEvent = findViewById(R.id.fabEditEvent);
+        fabAction = findViewById(R.id.fabAction);
 
         srlRefresh = findViewById(R.id.srlRefresh);
 
@@ -222,14 +223,22 @@ public class UserViewEventActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            btnJoinEvent.setText("Join Event");
+                            if (event.getVisitedMembers().contains(CurrentUser.user.uid)) {
+                                // User has visited
 
-                            btnJoinEvent.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                                btnJoinEvent.setEnabled(false);
+                                btnJoinEvent.setText("You have entered the event");
+                            } else {
+                                btnJoinEvent.setText("Join Event");
 
-                                }
-                            });
+                                btnJoinEvent.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Toast.makeText(UserViewEventActivity.this, "Please scan the QR code from the Host to Join the event.", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(UserViewEventActivity.this, UserScannerActivity.class));
+                                    }
+                                });
+                            }
                         }
                     } else {
                         // Event has ended
@@ -321,6 +330,18 @@ public class UserViewEventActivity extends AppCompatActivity {
                             });
                         }
                     });
+
+                    if (today.after(startDate)) {
+                        fabAction.setVisibility(View.VISIBLE);
+                        fabAction.setEnabled(true);
+                        fabAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(UserViewEventActivity.this, UserViewQRCodeActivity.class)
+                                .putExtra("eventUid", eventUid));
+                            }
+                        });
+                    }
                 }
             }
 
