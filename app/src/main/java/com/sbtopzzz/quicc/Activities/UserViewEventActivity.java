@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sbtopzzz.quicc.API.Funcs;
 import com.sbtopzzz.quicc.API.Schemas.Event;
 import com.sbtopzzz.quicc.API.Schemas.User;
@@ -42,7 +44,9 @@ public class UserViewEventActivity extends AppCompatActivity {
 
     private Button btnAddMembers, btnJoinEvent;
 
-    private PrettyTime p = new PrettyTime();
+    private FloatingActionButton fabEditEvent;
+
+    private final PrettyTime p = new PrettyTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +68,12 @@ public class UserViewEventActivity extends AppCompatActivity {
         btnAddMembers = findViewById(R.id.btnAddMembers);
         btnJoinEvent = findViewById(R.id.btnJoinEvent);
 
+        fabEditEvent = findViewById(R.id.fabEditEvent);
+
         LoadEvent();
     }
 
-    private void LoadEvent() {
+    public void LoadEvent() {
         Funcs.eventGet(eventUid, new Funcs.EventGetResult() {
             @Override
             public void onSuccess(@NonNull Event event) {
@@ -88,6 +94,7 @@ public class UserViewEventActivity extends AppCompatActivity {
                         if (user.uid.equals(CurrentUser.user.uid)) {
                             // Enable addMembers button
 
+                            btnAddMembers.setVisibility(View.VISIBLE);
                             btnAddMembers.setText("Add Members");
                             btnAddMembers.setEnabled(true);
                             btnAddMembers.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +226,17 @@ public class UserViewEventActivity extends AppCompatActivity {
                     }
                 } else
                     tvEventStart.setText("Will start " + p.format(startDate));
+
+                if (event.getHost().equals(CurrentUser.user.uid)) {
+                    fabEditEvent.setVisibility(View.VISIBLE);
+                    fabEditEvent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(UserViewEventActivity.this, UserEditEventActivity.class)
+                            .putExtra("eventUid", eventUid));
+                        }
+                    });
+                }
             }
 
             @Override

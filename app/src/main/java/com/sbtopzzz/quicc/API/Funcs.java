@@ -7,6 +7,7 @@ import com.sbtopzzz.quicc.API.Schemas.Event;
 import com.sbtopzzz.quicc.API.Schemas.EventCreate_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventDelete_Body;
 import com.sbtopzzz.quicc.API.Schemas.EventMembers_Default;
+import com.sbtopzzz.quicc.API.Schemas.EventUpdate_Body;
 import com.sbtopzzz.quicc.API.Schemas.SearchUser;
 import com.sbtopzzz.quicc.API.Schemas.User;
 import com.sbtopzzz.quicc.API.Schemas.UserFriend;
@@ -551,6 +552,37 @@ public class Funcs {
         });
     }
     public interface EventDeleteResult {
+        void onSuccess();
+        void onWarning(String errorText);
+        void onFailure(@NonNull Throwable t);
+    }
+
+    public static void eventUpdate(@NonNull String emailId, @NonNull String eventUid, @NonNull Event event, @NonNull EventUpdateResult result) {
+        EndPoints client = Client.getClient().create(EndPoints.class);
+        EventUpdate_Body body = new EventUpdate_Body(emailId, eventUid, event);
+
+        Call<Object> call = client.eventUpdate(getLoginToken(), body);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.code() == 200) {
+                    result.onSuccess();
+
+                    return;
+                }
+
+                // Failure
+                String errorText = response.body() == null ? String.valueOf(response.code()) : response.body().toString();
+                result.onWarning(errorText);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                result.onFailure(t);
+            }
+        });
+    }
+    public interface EventUpdateResult {
         void onSuccess();
         void onWarning(String errorText);
         void onFailure(@NonNull Throwable t);
