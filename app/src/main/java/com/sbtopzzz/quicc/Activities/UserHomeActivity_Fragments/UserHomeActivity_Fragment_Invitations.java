@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ import java.util.List;
 public class UserHomeActivity_Fragment_Invitations extends Fragment {
     private Context context;
     private RecyclerView rvInvitations;
+
+    private SwipeRefreshLayout srlRefresh;
 
     public UserHomeActivity_Fragment_Invitations(@NonNull Context context) {
         this.context = context;
@@ -50,12 +53,24 @@ public class UserHomeActivity_Fragment_Invitations extends Fragment {
 
     private void Initialize(View parent) {
         rvInvitations = parent.findViewById(R.id.rvInvitations);
+
+        srlRefresh = parent.findViewById(R.id.srlRefresh);
+
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                GetInvitations();
+            }
+        });
     }
 
     private void GetInvitations() {
         Funcs.eventsInvited(CurrentUser.user.uid, new Funcs.EventsInvitedResult() {
             @Override
             public void onSuccess(@NonNull List<Event> invitedEvents) {
+                if (srlRefresh.isRefreshing())
+                    srlRefresh.setRefreshing(false);
+
                 Toast.makeText(context, "Events count: " + invitedEvents.size(), Toast.LENGTH_SHORT).show();
 
                 List<MyEvent> myEvents = new ArrayList<>();

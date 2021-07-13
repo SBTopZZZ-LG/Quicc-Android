@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ import java.util.List;
 
 public class UserHomeActivity_Fragment_Friends extends Fragment {
     private RecyclerView rvMyFriends;
+
+    private SwipeRefreshLayout srlRefresh;
     private FloatingActionButton fab;
 
     public UserHomeActivity_Fragment_Friends() {
@@ -57,6 +60,16 @@ public class UserHomeActivity_Fragment_Friends extends Fragment {
 
     private void Initialize(View parent) {
         rvMyFriends = parent.findViewById(R.id.rvMyFriends);
+
+        srlRefresh = parent.findViewById(R.id.srlRefresh);
+
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                GetMyFriends();
+            }
+        });
+
         fab = parent.findViewById(R.id.fabSearch);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +84,9 @@ public class UserHomeActivity_Fragment_Friends extends Fragment {
         Funcs.userFriendsGet(CurrentUser.user.getEmailId(), new Funcs.UserFriendsGetResult() {
             @Override
             public void onSuccess(@NonNull List<UserFriend> friends) {
+                if (srlRefresh.isRefreshing())
+                    srlRefresh.setRefreshing(false);
+
                 List<Friend> uiFriends = new ArrayList<>();
 
                 MyFriendsAdapter adapter = new MyFriendsAdapter(uiFriends);
