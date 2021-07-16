@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/_group1" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/home"
@@ -18,7 +19,14 @@
             android:title="My Friends" />
     </group>
 
-    <group android:checkableBehavior="none">
+    <group android:id="@+id/_group2" android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_view_profile"
+            android:icon="@drawable/person"
+            android:title="My Profile" />
+    </group>
+
+    <group android:id="@+id/_group3" android:checkableBehavior="none">
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/exit"

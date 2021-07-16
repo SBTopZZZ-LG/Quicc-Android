@@ -10,8 +10,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Client {
-    public static final String HOST_IP = "192.168.1.20";
-    public static final String BASE_URL = "http://"+HOST_IP+":3000";
+    public static final String TEST_URL = "";
+    public static final String BASE_URL = "https://quicc-server.herokuapp.com/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

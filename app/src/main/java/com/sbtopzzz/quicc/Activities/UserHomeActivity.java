@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +47,14 @@ public class UserHomeActivity extends AppCompatActivity {
 
                 setFragment(fragment_home);
                 navView.setCheckedItem(R.id.nav_home);
+
+                View header = navView.getHeaderView(0);
+                ImageView ivAvatar = header.findViewById(R.id.ivAvatar);
+                TextView tvUserName = header.findViewById(R.id.tvUserName),
+                        tvEmailID = header.findViewById(R.id.tvEmailID);
+
+                tvUserName.setText(CurrentUser.user.getName());
+                tvEmailID.setText(CurrentUser.user.getEmailId());
             }
 
             @Override
@@ -55,6 +65,8 @@ public class UserHomeActivity extends AppCompatActivity {
                     setFragment(fragment_invitations);
                 } else if (itemId == R.id.nav_friends) {
                     setFragment(fragment_friends);
+                } else if (itemId == R.id.nav_view_profile) {
+                    startActivity(new Intent(UserHomeActivity.this, UserProfileActivity.class));
                 } else if (itemId == R.id.nav_logout) {
                     signOut();
                 }
