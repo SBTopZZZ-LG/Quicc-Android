@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Client {
     public static final String TEST_URL = "";
-    public static final String BASE_URL = "https://quicc-server.herokuapp.com/";
+    public static final String BASE_URL = "https://quicc-server-eu.herokuapp.com/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
